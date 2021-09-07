@@ -23,7 +23,7 @@ jobs:
       - run: echo "${{ secrets.ARR }}" > "$HOME/.ssh/id_rsa"
       - run: chmod 600 "$HOME/.ssh/id_rsa"
       # Build
-      - run: npm build
+      - run: npm install
       - run: npm run build
       # Deploy
       - run: cd public && rsync -rv -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete . www@178.21.11.126:/home/www/
