@@ -26,4 +26,4 @@ jobs:
       - run: npm install
       - run: npm run build
       # Deploy
-      - run: cd build && rsync -rv -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete . www@178.21.11.126:/home/www/backend/test/
+      - run: cd build && rsync -rv -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete . www@178.21.11.126:/home/www/test/backend/
