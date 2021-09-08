@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node 'build/server.js'",
-    "build": "tsc -p . && ncp src dist",
+    "build": "tsc -p . && ncp src build",
     "test": "jest",
     "test:watch": "jest --verbose --detectOpenHandles",
     "start:dev": "npm run build:dev",
