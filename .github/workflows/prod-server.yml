@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  pull_request:
+  push:
+    branches:
+      - release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      # Setup key
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{ secrets.RSA_PROD }}" > "$HOME/.ssh/id_rsa"
+      - run: chmod 600 "$HOME/.ssh/id_rsa"
+      # Build
+      - run: npm install
+      - run: npm run build
+      # Deploy
+      - run: rsync -rv -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete . www@${{ secrets.IP }}:/home/www/backend/
+      - run: ssh www@${{ secrets.IP }} "pm2 restart prod-server"

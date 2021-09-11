@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -20,11 +20,11 @@ jobs:
       # Setup key
       - run: set -eu
       - run: mkdir "$HOME/.ssh"
-      - run: echo "${{ secrets.ARR }}" > "$HOME/.ssh/id_rsa"
+      - run: echo "${{ secrets.RSA_TEST }}" > "$HOME/.ssh/id_rsa"
       - run: chmod 600 "$HOME/.ssh/id_rsa"
       # Build
       - run: npm install
       - run: npm run build
       # Deploy
-      - run: rsync -rv -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete . www@178.21.11.126:/home/www/test/backend/
-      - run: ssh www@178.21.11.126 "pm2 restart test-server"
+      - run: rsync -rv -e "ssh -o StrictHostKeyChecking=no" --archive --compress --delete . www@${{ secrets.IP }}:/home/www-test/backend/
+      - run: ssh www@${{ secrets.IP }} "pm2 restart test-server"
